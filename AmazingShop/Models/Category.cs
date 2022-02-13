@@ -11,11 +11,12 @@ namespace AmazingShop.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Nazwa kategorii jest wymagana")]
+        [DisplayName("Nazwa Kategorii")]
         public string Name { get; set; }
-        [DisplayName("Display Order")]
-        [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "Display order for the category must be greater than 0")]
+        [DisplayName("Kolejność Wyświetlania")]
+        [Required(ErrorMessage = "Kolejność wyświetlania jest wymagana i musi być wyższa niż 0")]
+        [Range(1, int.MaxValue, ErrorMessage = "Kolejność wyświetlania musi być wyższa niż 0")]
         public int DisplayOrder { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 using AmazingShop.Database;
+using AmazingShop.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -30,6 +31,9 @@ namespace AmazingShop
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<AppDbContext>();
+
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
