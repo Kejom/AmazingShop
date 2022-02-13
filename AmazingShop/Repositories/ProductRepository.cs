@@ -15,7 +15,7 @@ namespace AmazingShop.Repositories
     {
         private AppDbContext _dbContext;
         private const string _imagePath = @"\images\product\";
-        private string _fullImagePath;
+        private readonly string _fullImagePath;
 
 
         public string ImagePath
@@ -27,8 +27,6 @@ namespace AmazingShop.Repositories
         {
             _dbContext = dbContext;
             _fullImagePath = webHostEnvironment.WebRootPath + _imagePath;
-
-
         }
 
         public IEnumerable<Product> GetAll()
@@ -39,7 +37,7 @@ namespace AmazingShop.Repositories
 
         public Product GetById(int id)
         {
-            return _dbContext.Products.FirstOrDefault(p => p.Id == id);
+            return GetAll().FirstOrDefault(p => p.Id == id);
         }
 
         public void RemoveById(int id)

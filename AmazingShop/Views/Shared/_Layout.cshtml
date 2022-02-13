@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using AmazingShop.Utility
+@inject ICartSessionManager cartSessionManager
+
+@{
+    var cart = cartSessionManager.GetCart();
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -21,10 +27,23 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Strona Główna</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Category</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Panel Admina
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Kategorie</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Produkty</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Create Admin User</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="Cart" class="nav-link">
+                                <i class="fas fa-shopping-cart"></i> &nbsp; (@cart.Count)
+                            </a>
                         </li>
                     </ul>
                 </div>

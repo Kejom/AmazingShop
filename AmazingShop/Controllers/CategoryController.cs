@@ -10,7 +10,7 @@ namespace AmazingShop.Controllers
 {
     public class CategoryController : Controller
     {
-        private ICategoryRepository _categoryRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
         public CategoryController(ICategoryRepository categoryRepository)
         {

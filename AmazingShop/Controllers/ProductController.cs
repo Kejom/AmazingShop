@@ -11,8 +11,8 @@ namespace AmazingShop.Controllers
 {
     public class ProductController : Controller
     {
-        private IProductRepository _productRepository;
-        private ICategoryRepository _categoryRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
         public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
