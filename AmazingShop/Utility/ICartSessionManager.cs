@@ -10,5 +10,6 @@ namespace AmazingShop.Utility
         void RemoveProductFromCart(int productId);
         void SetCart(List<ProductInCart> cart);
         bool IsProductInCart(int productId);
+        void IncreaseProductQuantity(int productId, int quantityIncrease);
     }
 }

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AmazingShop.Models
+namespace AmazingShop.Models.ViewModels
 {
-    public class ProductInCart
+    public class CartProductVM
     {
-        public int ProductId { get; set; }
+        public Product Product { get; set; }
         public int Quantity { get; set; }
     }
 }

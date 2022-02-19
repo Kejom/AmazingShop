@@ -34,8 +34,10 @@ namespace AmazingShop.Utility
 
         public void AddProductToCart(int productId)
         {
+            if (IsProductInCart(productId))
+                IncreaseProductQuantity(productId, 1);
             var cart = GetCart();
-            cart.Add(new ProductInCart { ProductId = productId });
+            cart.Add(new ProductInCart { ProductId = productId, Quantity = 1 });
             SetCart(cart);
         }
 
@@ -50,6 +52,15 @@ namespace AmazingShop.Utility
         {
             var cart = GetCart();
             return cart.FirstOrDefault(p => p.ProductId == productId) is not null;
+        }
+        public void IncreaseProductQuantity(int productId, int quantityIncrease)
+        {
+            var cart = GetCart();
+            var product = cart.FirstOrDefault(p => p.ProductId == productId);
+            if (product is null)
+                throw new ArgumentException("product doesnt exist");
+            product.Quantity += quantityIncrease;
+            SetCart(cart);
         }
     }
 }
