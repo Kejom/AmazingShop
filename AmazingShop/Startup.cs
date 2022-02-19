@@ -30,7 +30,8 @@ namespace AmazingShop
             services.AddControllersWithViews();
             services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddDefaultTokenProviders().AddDefaultUI()
                 .AddEntityFrameworkStores<AppDbContext>();
             services.AddHttpContextAccessor();
             services.AddSession(Options =>
@@ -42,6 +43,7 @@ namespace AmazingShop
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<ICartSessionManager, CartSessionManager>();
+            services.AddTransient<IAddressRepository, AddressRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

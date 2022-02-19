@@ -1,0 +1,107 @@
+﻿@model Address
+
+@{ 
+    var title = "Stwórz Nowy Adres";
+    var action = "Create";
+    if(Model.Id != 0)
+    {
+        title = "Edycja Adresu";
+        action = "Edit";
+            }
+}
+<form method="post" asp-action="@action">
+    @if (Model.Id != 0)
+    {
+        <input asp-for="Id" hidden />
+    }
+    <input asp-for="UserId" hidden/>
+    <div class="border p-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group" row>
+            <h2 class="text-info pl-3">@title</h2>
+        </div>
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Country"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Country" class="form-control" />
+                        <span asp-validation-for="Country" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="City"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="City" class="form-control" />
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Street"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Street" class="form-control" />
+                        <span asp-validation-for="Street" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="BuildingNumber"></label>
+                    </div>
+                    <div class="col-2">
+                        <input asp-for="BuildingNumber" class="form-control" />
+                        <span asp-validation-for="BuildingNumber" class="text-danger"></span>
+                    </div>
+                    <div class="col-4">
+                        <label asp-for="LocalNumber"></label>
+                    </div>
+                    <div class="col-2">
+                        <input asp-for="LocalNumber" class="form-control" />
+                        <span asp-validation-for="LocalNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="ZipPostalCode"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="ZipPostalCode" class="form-control" />
+                        <span asp-validation-for="ZipPostalCode" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-8 offset-4 row">
+                        <div class="col">
+                            @if (Model.Id != 0)
+                            {
+                                <input type="submit" class="btn btn-info w-100" value="Zapisz Zmiany" />
+                            }
+                            else
+                            {
+                                <input type="submit" class="btn btn-primary w-100" value="Utwórz Adres" />
+                            }
+                        </div>
+                        <div class="col">
+                            <a asp-action="Index" class="btn btn-success w-100">
+                                <i class="fas fa-sign-out-alt"></i>Wróć
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

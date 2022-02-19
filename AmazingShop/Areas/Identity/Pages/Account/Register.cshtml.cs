@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using AmazingShop.Utility;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -23,17 +24,20 @@ namespace AmazingShop.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         [BindProperty]
@@ -51,19 +55,29 @@ namespace AmazingShop.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
-            [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [StringLength(100, ErrorMessage = "{0} musi mieć pomiedzy {2} i {1} znaków.", MinimumLength = 6)]
+            [DataType(DataType.Password, ErrorMessage = "Hasło musi się skłądać z przynajmniej jednej dużej oraz małej litery, liczby oraz znaku specjalnego")]
+            [Display(Name = "Hasło")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Potwierdź Hasło")]
+            [Compare("Password", ErrorMessage = "Hasła nie zgadzają się.")]
             public string ConfirmPassword { get; set; }
+            [Display(Name ="Imię")]
+            public string FirstName { get; set; }
+            [Display(Name = "Nazwisko")]
+            public string Surname { get; set; }
+            [Display(Name ="Numer Telefonu")]
+            public string PhoneNumber { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            if (!await _roleManager.RoleExistsAsync(UserRoles.Customer.ToString()))
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Customer.ToString()));
+            if (!await _roleManager.RoleExistsAsync(UserRoles.Admin.ToString()))
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Admin.ToString()));
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -78,6 +92,7 @@ namespace AmazingShop.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, UserRoles.Customer.ToString());
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

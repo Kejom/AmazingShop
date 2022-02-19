@@ -1,5 +1,7 @@
 ﻿@using AmazingShop.Utility
+@using Microsoft.AspNetCore.Identity
 @inject ICartSessionManager cartSessionManager
+@inject SignInManager<IdentityUser> SignInManager
 
 @{
     var cart = cartSessionManager.GetCart();
@@ -40,6 +42,19 @@
                                 <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Create Admin User</a>
                             </div>
                         </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Panel Użytkownika
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Address" asp-action="Index">Adresy</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Zamówienia</a>
+                                    <div class="dropdown-divider"></div>
+                                </div>
+                            </li>
+                        }
                         <li>
                             <a asp-action="Index" asp-controller="Cart" class="nav-link">
                                 <i class="fas fa-shopping-cart"></i> &nbsp; (@cart.Count)

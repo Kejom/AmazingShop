@@ -2,6 +2,7 @@
 using AmazingShop.Models.ViewModels;
 using AmazingShop.Repositories;
 using AmazingShop.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace AmazingShop.Controllers
 {
+    [Authorize]
     public class CartController : Controller
     {
         private readonly ICartSessionManager _cartManager;
