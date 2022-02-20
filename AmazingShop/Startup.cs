@@ -1,4 +1,5 @@
 using AmazingShop.Database;
+using AmazingShop.Models;
 using AmazingShop.Repositories;
 using AmazingShop.Utility;
 using Microsoft.AspNetCore.Builder;
@@ -30,7 +31,7 @@ namespace AmazingShop
             services.AddControllersWithViews();
             services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<AppUser, IdentityRole>()
                 .AddDefaultTokenProviders().AddDefaultUI()
                 .AddEntityFrameworkStores<AppDbContext>();
             services.AddHttpContextAccessor();
@@ -44,6 +45,7 @@ namespace AmazingShop
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<ICartSessionManager, CartSessionManager>();
             services.AddTransient<IAddressRepository, AddressRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

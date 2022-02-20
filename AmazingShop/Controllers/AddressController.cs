@@ -13,7 +13,7 @@ namespace AmazingShop.Controllers
     [Authorize]
     public class AddressController : Controller
     {
-        private IAddressRepository _addressRepository;
+        private readonly IAddressRepository _addressRepository;
         public AddressController(IAddressRepository addressRepository)
         {
             _addressRepository = addressRepository;
