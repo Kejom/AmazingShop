@@ -25,9 +25,9 @@ namespace AmazingShop.Models
         [Display(Name = "Suma do zapłaty")]
         public double FinalOrderTotal { get; set; }
         [Display(Name = "Status Zamówienia")]
-        public string OrderStatus { get; set; }
+        public int OrderStatus { get; set; }
         [Display(Name = "Metoda Płatności")]
-        public string PayymentMethod { get; set; }
+        public int PayymentMethod { get; set; }
         public DateTime PaymentDate { get; set; }
         public string TransactionId { get; set; }
         [Required]

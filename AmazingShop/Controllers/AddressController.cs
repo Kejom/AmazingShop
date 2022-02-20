@@ -1,4 +1,5 @@
 ﻿using AmazingShop.Models;
+using AmazingShop.Models.ViewModels;
 using AmazingShop.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,20 +26,28 @@ namespace AmazingShop.Controllers
             return View(addresses);
         }
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult Create(string ctr = null, string act = null)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var address = new Address();
             address.UserId = userId;
-            return View("CreateEdit", address);
+            var viewModel = new VMWithRedirect<Address>
+            {
+                Model = address,
+                Controller = ctr,
+                Action = act
+            };
+            return View("CreateEdit", viewModel);
         }
         [HttpPost]
-        public IActionResult Create(Address address)
+        public IActionResult Create(VMWithRedirect<Address> viewModel)
         {
             if (!ModelState.IsValid)
-                return View("CreateEdit", address);
+                return View("CreateEdit", viewModel);
 
-            _addressRepository.Add(address);
+            _addressRepository.Add(viewModel.Model);
+            if (!String.IsNullOrEmpty(viewModel.Controller)  && !String.IsNullOrEmpty(viewModel.Action))
+                return RedirectToAction(viewModel.Action, viewModel.Controller);
             return RedirectToAction("Index");
         }
         [HttpGet]

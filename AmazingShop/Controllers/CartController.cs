@@ -21,13 +21,19 @@ namespace AmazingShop.Controllers
         private readonly IProductRepository _productRepository;
         private readonly IAddressRepository _addressRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IOrderRepository _orderRepository;
 
-        public CartController(ICartSessionManager cartSessionManager, IProductRepository productReposistory, IUserRepository userRepository, IAddressRepository addressRepository)
+        public CartController(ICartSessionManager cartSessionManager,
+            IProductRepository productReposistory,
+            IUserRepository userRepository,
+            IAddressRepository addressRepository,
+            IOrderRepository orderRepository)
         {
             _cartManager = cartSessionManager;
             _productRepository = productReposistory;
             _userRepository = userRepository;
             _addressRepository = addressRepository;
+            _orderRepository = orderRepository;
         }
         public IActionResult Index()
         {
@@ -56,13 +62,38 @@ namespace AmazingShop.Controllers
             var user = GetCurrentUser();
             var addresses = _addressRepository.GetUserAddresses(user.Id);
             var productsInCart = GetFullProductsInCart();
+            var paymentMethods = GetPaymentMethods();
             var viewModel = new NewOrderVM
             {
                 User = user,
                 Addresses = addresses.Select(a => new SelectListItem { Value = a.Id.ToString(), Text = $"{a.Country}, {a.City}, {a.Street}" }),
-                Products = productsInCart
+                PaymentMethods = paymentMethods,
+                Products = productsInCart,
+                TotalPrice = GetTotalPrice(productsInCart)
             };
             return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Order(NewOrderVM viewModel)
+        {
+            var products = _cartManager.GetCart();
+            var header = new OrderHeader
+            {
+                FullName = $"{viewModel.User.FirstName} {viewModel.User.Surname}",
+                Email = viewModel.User.Email,
+                PhoneNumber = viewModel.User.PhoneNumber,
+                AddressId = viewModel.SelectedAddressId,
+                PayymentMethod = viewModel.SelectedPaymentMethod,
+                CreatedByUserId = viewModel.User.Id,
+                OrderDate = DateTime.Now,
+                OrderStatus = ((int)OrderStatuses.Created),
+                FinalOrderTotal = viewModel.TotalPrice
+            };
+            var orderedProducts = products.Select(p => new OrderedProduct { ProductId = p.ProductId, Quantity = p.Quantity });
+            _orderRepository.AddOrder(header, orderedProducts);
+            _cartManager.SetCart(new List<ProductInCart>());
+            return View("Confirmation", header);
         }
 
         private IEnumerable<CartProductVM> GetFullProductsInCart()
@@ -90,6 +121,19 @@ namespace AmazingShop.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return _userRepository.GetById(userId);
+        }
+        private double GetTotalPrice(IEnumerable<CartProductVM> products)
+        {
+            double total = 0;
+            foreach (var p in products)
+                total += (p.Product.Price * p.Quantity);
+            return Math.Round(total, 2);
+        }
+
+        private IEnumerable<SelectListItem> GetPaymentMethods()
+        {
+            var methods = Enum.GetValues(typeof(PaymentMethods)).Cast<PaymentMethods>();
+            return methods.Select(m => new SelectListItem { Text = m.GetDisplayName(), Value = ((int)m).ToString() });
         }
     }
 }

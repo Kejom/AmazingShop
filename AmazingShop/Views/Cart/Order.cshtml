@@ -8,10 +8,10 @@
                 <div class="card-header bg-dark text-light ml-0 row container">
                     <div class="col-6">
                         <i class="fa fa-shopping-cart"></i> &nbsp;
-                        Order Summary
+                        Podsumowanie Zamówienia
                     </div>
                     <div class="col-6 text-right">
-                        <a class="btn btn-outline-info btn-sm">Back to Cart</a>
+                        <a class="btn btn-outline-info btn-sm" onclick="history.back()">Wróć do Koszyka</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -27,6 +27,8 @@
                                     <div class="col-4">
                                         <label>Imię i Nazwisko</label>
                                     </div>
+                                    <input asp-for="User.Id" hidden />
+                                    <input asp-for="TotalPrice" hidden />
                                     <div class="col-4">
                                         <input asp-for="User.FirstName" type="text" class="form-control" />
                                         <span asp-validation-for="User.FirstName" class="text-danger"></span>
@@ -65,16 +67,27 @@
                                         <span asp-validation-for="SelectedAddressId" class="text-danger"></span>
                                     </div>
                                     <div>
-                                        <a asp-action="Create" asp-controller="Address" class="btn btn-outline-danger">
+                                        <a asp-action="Create" asp-controller="Address" asp-route-ctr="Cart" asp-route-act="Order" class="btn btn-outline-primary">
                                             <i class="fas fa-plus"></i>
                                         </a>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Metoda Płatności</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <select asp-for="SelectedPaymentMethod" asp-items="Model.PaymentMethods" class="form-control">
+                                            <option disabled selected>--Wybierz Metodę Płatności--</option>
+                                        </select>
+                                        <span asp-validation-for="SelectedPaymentMethod" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-12 col-lg-5 row">
                                 <div class="col-12">
                                     <h4 class="d-flex justify-content-between align-items-center mb-3">
-                                        <span class="text-info">Summary:</span>
+                                        <span class="text-info">Produkty:</span>
                                     </h4>
                                     <ul class="list-group mb-3">
                                         @foreach (var product in Model.Products)
@@ -82,11 +95,12 @@
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <div>
                                                     <h6 class="my-0">@product.Product.Name</h6>
-                                                    <small class="text-muted">Cena: $@product.Product.Price zł</small>
+                                                    <small class="text-muted">Cena: @product.Product.Price zł</small>
                                                 </div>
                                             </li>
                                         }
                                     </ul>
+                                    <h6>Razem: @Model.TotalPrice zł</h6>
                                 </div>
                             </div>
                         </div>
@@ -95,7 +109,7 @@
                 <div class="card-footer">
                     <div class="row">
                         <div class="col-12 col-md-5 offset-md-7">
-                            <button type="submit" class="btn btn-primary form-control">Submit Inquiry</button>
+                            <button type="submit" class="btn btn-primary form-control">Wyślij Zamówienie</button>
                         </div>
                     </div>
                 </div>
