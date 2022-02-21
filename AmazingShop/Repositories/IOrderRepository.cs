@@ -12,6 +12,6 @@ namespace AmazingShop.Repositories
         IEnumerable<OrderedProduct> GetProductsByOrderId(int id);
         void AddOrder(OrderHeader header, IEnumerable<OrderedProduct> products);
         public void AddProduct(OrderedProduct product, int orderId);
-
+        void UpdateHeader(OrderHeader header);
     }
 }

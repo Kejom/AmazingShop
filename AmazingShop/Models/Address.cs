@@ -22,8 +22,10 @@ namespace AmazingShop.Models
         [Display(Name = "Ulica")]
         public string Street { get; set; }
         [Required(ErrorMessage = "Pole Numer Budynku nie może być puste")]
+        [Range(1, int.MaxValue, ErrorMessage = "Numer Budynku musi być liczbą dodatnią")]
         [Display(Name = "Numer Budynku")]
         public int BuildingNumber { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "Numer Mieszkania musi być liczbą dodatnią")]
         [Display(Name = "Numer Mieszkania")]
         public int LocalNumber { get; set; }
         [RegularExpression(@"^(?=.*\d)[_0-9]{2}-[_0-9]{3}$", ErrorMessage = "Niepoprawny format kodu pocztowego")]

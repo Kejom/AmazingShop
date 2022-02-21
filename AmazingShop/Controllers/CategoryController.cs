@@ -1,5 +1,7 @@
 ﻿using AmazingShop.Models;
 using AmazingShop.Repositories;
+using AmazingShop.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace AmazingShop.Controllers
 {
+    [Authorize(Roles = nameof(UserRoles.Admin))]
     public class CategoryController : Controller
     {
         private readonly ICategoryRepository _categoryRepository;

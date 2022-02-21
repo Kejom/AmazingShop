@@ -1,5 +1,6 @@
 ﻿using AmazingShop.Database;
 using AmazingShop.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,12 +23,12 @@ namespace AmazingShop.Repositories
         }
         public OrderHeader GetHeaderById(int id)
         {
-            return _dbContext.OrderHeaders.FirstOrDefault(h => h.Id == id);
+            return _dbContext.OrderHeaders.Include(h=>h.Address).FirstOrDefault(h => h.Id == id);
         }
 
         public IEnumerable<OrderedProduct> GetProductsByOrderId(int id)
         {
-            return _dbContext.OrderedProducts.Where(p => p.OrderHeaderId == id);
+            return _dbContext.OrderedProducts.Where(p => p.OrderHeaderId == id).Include(p => p.Product);
         }
 
         public Order GetById(int id)
@@ -61,6 +62,12 @@ namespace AmazingShop.Repositories
                 throw new ArgumentException("Zamówienie z podanym Id nie istnieje");
             product.OrderHeaderId = orderId;
             _dbContext.OrderedProducts.Add(product);
+            _dbContext.SaveChanges();
+        }
+
+        public void UpdateHeader(OrderHeader header)
+        {
+            _dbContext.OrderHeaders.Update(header);
             _dbContext.SaveChanges();
         }
     }

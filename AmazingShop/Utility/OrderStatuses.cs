@@ -8,13 +8,13 @@ namespace AmazingShop.Utility
 {
     public enum OrderStatuses
     {
-        [Display(Name = "Utworzony")]
+        [Display(Name = "Utworzone")]
         Created,
-        [Display(Name = "Przetwarzany")]
+        [Display(Name = "Przetwarzane")]
         Processed,
-        [Display(Name = "Wysłany")]
+        [Display(Name = "Wysłane")]
         Shipped,
-        [Display(Name = "Anulowany")]
+        [Display(Name = "Anulowane")]
         Canceled,
     }
 }
