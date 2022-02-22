@@ -80,7 +80,7 @@ namespace AmazingShop.Controllers
             OrderHeader orderHeader = _orderRepository.GetHeaderById(order.Header.Id);
             orderHeader.OrderStatus = ((int)OrderStatuses.Processed);
             _orderRepository.UpdateHeader(orderHeader);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { admin = true });
         }
 
         [HttpPost]
@@ -90,7 +90,7 @@ namespace AmazingShop.Controllers
             orderHeader.OrderStatus = ((int)OrderStatuses.Shipped);
             orderHeader.ShippingDate = DateTime.Now;
             _orderRepository.UpdateHeader(orderHeader);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { admin = true });
         }
 
         [HttpPost]
@@ -105,10 +105,20 @@ namespace AmazingShop.Controllers
         [HttpPost]
         public IActionResult UpdateOrderDetails(Order order)
         {
+            if (!ModelState.IsValid)
+                return View("Details", order);
             OrderHeader orderHeaderFromDb = _orderRepository.GetHeaderById(order.Header.Id);
+
             orderHeaderFromDb.FullName = order.Header.FullName;
             orderHeaderFromDb.PhoneNumber = order.Header.PhoneNumber;
             orderHeaderFromDb.Email = order.Header.Email;
+            orderHeaderFromDb.City = order.Header.City;
+            orderHeaderFromDb.Country = order.Header.Country;
+            orderHeaderFromDb.Street = order.Header.Street;
+            orderHeaderFromDb.BuildingNumber = order.Header.BuildingNumber;
+            orderHeaderFromDb.LocalNumber = order.Header.LocalNumber;
+            orderHeaderFromDb.ZipPostalCode = order.Header.ZipPostalCode;
+
             _orderRepository.UpdateHeader(orderHeaderFromDb);
             return RedirectToAction("Details", "Order", new { id = orderHeaderFromDb.Id });
         }

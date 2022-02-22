@@ -78,17 +78,23 @@ namespace AmazingShop.Controllers
         public IActionResult Order(NewOrderVM viewModel)
         {
             var products = _cartManager.GetCart();
+            var selectedAddress = _addressRepository.GetById(viewModel.SelectedAddressId);
             var header = new OrderHeader
             {
                 FullName = $"{viewModel.User.FirstName} {viewModel.User.Surname}",
                 Email = viewModel.User.Email,
                 PhoneNumber = viewModel.User.PhoneNumber,
-                AddressId = viewModel.SelectedAddressId,
                 PayymentMethod = viewModel.SelectedPaymentMethod,
                 CreatedByUserId = viewModel.User.Id,
                 OrderDate = DateTime.Now,
                 OrderStatus = ((int)OrderStatuses.Created),
-                FinalOrderTotal = viewModel.TotalPrice
+                FinalOrderTotal = viewModel.TotalPrice,
+                Country = selectedAddress.Country,
+                City = selectedAddress.City,
+                Street = selectedAddress.Street,
+                BuildingNumber = selectedAddress.BuildingNumber,
+                LocalNumber = selectedAddress.LocalNumber,
+                ZipPostalCode = selectedAddress.ZipPostalCode
             };
             var orderedProducts = products.Select(p => new OrderedProduct { ProductId = p.ProductId, Quantity = p.Quantity });
             _orderRepository.AddOrder(header, orderedProducts);

@@ -14,6 +14,8 @@ namespace AmazingShop.Models
         [Required(ErrorMessage ="Nazwa Produktu jest wymagana")]
         [Display(Name = "Nazwa Produktu")]
         public string Name { get; set; }
+        [Display(Name = "Ukryj Produkt")]
+        public bool Hidden { get; set; }
         [Range(1, int.MaxValue, ErrorMessage ="Cena musi być wyższa niż 0 zł")]
         [Display(Name = "Cena")]
         public double Price { get; set; }

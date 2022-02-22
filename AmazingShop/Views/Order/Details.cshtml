@@ -45,28 +45,38 @@
                             <div class="row my-1">
                                 <div class="col-3">Adres</div>
                                 <div class="col-5">
-                                    <input asp-for="Header.Address.Street" type="text" class="form-control" readonly="@(!ViewBag.IsAdmin)" />
+                                    <input asp-for="Header.Street" type="text" class="form-control" readonly="@(!ViewBag.IsAdmin)" />
                                 </div>
                                 <div class="col-2">
-                                    <input asp-for="Header.Address.BuildingNumber" type="text" class="form-control" readonly="@(!ViewBag.IsAdmin)" />
+                                    <input asp-for="Header.BuildingNumber" type="text" class="form-control" readonly="@(!ViewBag.IsAdmin)" />
                                 </div>
                                 <div class="col-2">
-                                    <input asp-for="Header.Address.LocalNumber" type="text" class="form-control" readonly="@(!ViewBag.IsAdmin)" />
+                                    <input asp-for="Header.LocalNumber" type="text" class="form-control" readonly="@(!ViewBag.IsAdmin)" />
                                 </div>
+                            </div>
+                            <div class="row">
+                                <span asp-validation-for="Header.Street" class="text-danger"></span>
+                                <span asp-validation-for="Header.BuildingNumber" class="text-danger"></span>
+                                <span asp-validation-for="Header.LocalNumber" class="text-danger"></span>
                             </div>
                             <div class="row my-1">
                                 <div class="col-3">Miasto i Kod Pocztowy</div>
                                 <div class="col-5">
-                                    <input asp-for="Header.Address.City" type="text" class="form-control" readonly="@(!ViewBag.IsAdmin)" />
+                                    <input asp-for="Header.City" type="text" class="form-control" readonly="@(!ViewBag.IsAdmin)" />
                                 </div>
                                 <div class="col-4">
-                                    <input asp-for="Header.Address.ZipPostalCode" type="text" class="form-control" readonly="@(!ViewBag.IsAdmin)" />
+                                    <input asp-for="Header.ZipPostalCode" type="text" class="form-control" readonly="@(!ViewBag.IsAdmin)" />
                                 </div>
+                            </div>
+                            <div class="row">
+                                <span asp-validation-for="Header.City" class="text-danger"></span>
+                                <span asp-validation-for="Header.ZipPostalCode" class="text-danger"></span>
                             </div>
                             <div class="row my-1">
                                 <div class="col-3">Kraj</div>
                                 <div class="col-9">
-                                    <input asp-for="Header.Address.Country" type="text" class="form-control" readonly="@(!ViewBag.IsAdmin)" />
+                                    <input asp-for="Header.Country" type="text" class="form-control" readonly="@(!ViewBag.IsAdmin)" />
+                                    <span asp-validation-for="Header.Country" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row my-1">
@@ -125,13 +135,24 @@
                                 {
                                     <li class="list-group-item d-flex justify-content-between p-2">
                                         <div class="row container">
-                                            <div class="col-8">
-                                                <h6 class="my-0 text-info">@product.Product.Name</h6>
-                                                <small class="text-muted">Cena : @product.Product.Price zł</small><br />
-                                                <small class="text-muted">Ilość : @product.Quantity</small>
-                                            </div>
+                                            @if (product is null)
+                                            {
+                                                <div class="col-8">
+                                                    <h6 class="my-0 text-info">Deleted Product</h6>
+                                                    <small class="text-muted">Cena : @product.Price</small><br />
+                                                    <small class="text-muted">Ilość : @product.Quantity</small>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-8">
+                                                    <h6 class="my-0 text-info">@product.Product.Name</h6>
+                                                    <small class="text-muted">Cena : @product.Price zł</small><br />
+                                                    <small class="text-muted">Ilość : @product.Quantity</small>
+                                                </div>
+                                            }
                                             <div class="col-4">
-                                                <p class="text-success">@(Math.Round(product.Quantity * product.Product.Price, 2)) zł</p>
+                                                <p class="text-success">@product.TotalPrice zł</p>
                                             </div>
                                         </div>
                                     </li>
@@ -187,7 +208,7 @@
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
     <script>
-    $(document).ready(function () {
+        $(document).ready(function () {
             var shippingDate = document.getElementById("shippingDate");
             if (shippingDate.value == '1/1/0001') {
                 shippingDate.value = "";

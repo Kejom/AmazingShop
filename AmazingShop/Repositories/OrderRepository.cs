@@ -23,7 +23,7 @@ namespace AmazingShop.Repositories
         }
         public OrderHeader GetHeaderById(int id)
         {
-            return _dbContext.OrderHeaders.Include(h=>h.Address).FirstOrDefault(h => h.Id == id);
+            return _dbContext.OrderHeaders.FirstOrDefault(h => h.Id == id);
         }
 
         public IEnumerable<OrderedProduct> GetProductsByOrderId(int id)
@@ -50,6 +50,11 @@ namespace AmazingShop.Repositories
             _dbContext.SaveChanges();
             foreach (var product in products)
             {
+                var productData = _dbContext.Products.FirstOrDefault(p => p.Id == product.ProductId);
+                if (productData is null)
+                    throw new ArgumentException("Zamówiony produkt nie istnieje");
+                product.Price = productData.Price;
+                product.TotalPrice = Math.Round((productData.Price * product.Quantity), 2);
                 product.OrderHeaderId = header.Id;
                 _dbContext.OrderedProducts.Add(product);
             }
@@ -60,6 +65,11 @@ namespace AmazingShop.Repositories
             var order = _dbContext.OrderHeaders.FirstOrDefault(o => o.Id == orderId);
             if (order is null)
                 throw new ArgumentException("Zamówienie z podanym Id nie istnieje");
+            var productData = _dbContext.Products.FirstOrDefault(p => p.Id == product.ProductId);
+            if (productData is null)
+                throw new ArgumentException("Zamówiony produkt nie istnieje");
+            product.Price = productData.Price;
+            product.TotalPrice = Math.Round((productData.Price * product.Quantity), 2);
             product.OrderHeaderId = orderId;
             _dbContext.OrderedProducts.Add(product);
             _dbContext.SaveChanges();
