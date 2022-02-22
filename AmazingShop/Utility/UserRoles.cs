@@ -8,6 +8,7 @@ namespace AmazingShop.Utility
     public enum UserRoles
     {
         Customer,
-        Admin
+        Admin,
+        MasterAdmin
     }
 }

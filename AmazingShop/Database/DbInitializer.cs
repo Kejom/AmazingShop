@@ -41,6 +41,7 @@ namespace AmazingShop.Database
             {
                 _roleManager.CreateAsync(new IdentityRole(UserRoles.Admin.ToString())).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(UserRoles.Customer.ToString())).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(UserRoles.MasterAdmin.ToString())).GetAwaiter().GetResult();
             }
             else
             {
@@ -59,7 +60,7 @@ namespace AmazingShop.Database
 
             AppUser user = _appDbContext.Users.FirstOrDefault(u => u.Email == "admin@gmail.com");
             _userManager.AddToRoleAsync(user, UserRoles.Admin.ToString()).GetAwaiter().GetResult();
-
+            _userManager.AddToRoleAsync(user, UserRoles.MasterAdmin.ToString()).GetAwaiter().GetResult();
 
         }
     }

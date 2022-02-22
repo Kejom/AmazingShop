@@ -1,0 +1,72 @@
+﻿@using System.Security.Claims
+@model IEnumerable<AmazingShop.Models.ViewModels.UserVM>
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Zarządzanie Użytkownikami</h2>
+        </div>
+        <div class="col-6 text-right">
+
+        </div>
+    </div>
+    <br /><br />
+    @if (Model.Count() > 0)
+    {
+        <table class="table table-bordered table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        Imię i Naziwsko
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Rola
+                    </th>
+
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        @{
+                            if (User.FindFirstValue(ClaimTypes.NameIdentifier) == user.Id || user.IsMasterAdmin)
+                                continue;
+
+                            var role = user.IsAdmin ? "Admin" : "Klient";
+                        }
+                        <td width="30%">@user.Name</td>
+                        <td width="30%">@user.Email</td>
+                        <td width="30%">@role</td>
+                        <td class="text-center">
+                            <div class="w-75 btn-group" role="group">
+                                @if (user.IsAdmin)
+                                {
+                                    <a asp-action="Demote" asp-route-Id="@user.Id" class="btn btn-danger mx-2">
+                                        <i class="fas fa-level-down-alt"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-action="Promote" asp-route-Id="@user.Id" class="btn btn-primary mx-2">
+                                        <i class="fa fa-level-up-alt"></i>
+                                    </a>
+                                }
+
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Brak Użytkowników do wyświetlenia</p>
+    }
+</div>
