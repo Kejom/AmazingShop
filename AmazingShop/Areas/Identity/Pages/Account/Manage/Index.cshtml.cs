@@ -22,7 +22,7 @@ namespace AmazingShop.Areas.Identity.Pages.Account.Manage
             _userManager = userManager;
             _signInManager = signInManager;
         }
-
+        [Display(Name = "Nazwa Użytkownika")]
         public string Username { get; set; }
 
         [TempData]
@@ -34,7 +34,7 @@ namespace AmazingShop.Areas.Identity.Pages.Account.Manage
         public class InputModel
         {
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = "Numer Telefonu")]
             public string PhoneNumber { get; set; }
         }
 

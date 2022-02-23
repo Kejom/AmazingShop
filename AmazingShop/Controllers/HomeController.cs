@@ -30,7 +30,7 @@ namespace AmazingShop.Controllers
         public IActionResult Index()
         {
             var categories = _categoryRepository.GetAll();
-            var products = _productRepository.GetAll().Select(p => AddFullImageLinkToProduct(p));
+            var products = _productRepository.GetAll().Where(p=>!p.Hidden).Select(p => AddFullImageLinkToProduct(p));
             var viewModel = new HomeVM
             {
                 Categories = categories,
